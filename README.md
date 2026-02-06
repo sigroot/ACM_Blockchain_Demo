@@ -28,3 +28,7 @@ This unit starts adding blocks to the chain. Now blocks can each be seen to rela
 ### 04-ChainValidation
 
 This unit allows the chain to validate its own hashes. The chain now technically works and could create an agreed upon series of events between a network of devices (though that would several other mechanisms to prevent individuals from confusing the others. This will not delve into those mechanisms.). However, this is not sufficient for blockchain's most well known usecase: cryptocurrency. Currently blocks are nearly free to create.
+
+### 05-Mining
+
+This units now permits mining for blocks. Each block now has the additional requirement that its hash starts with four '0's. Because hashes are, intentionally, one-way functions, the only what to correctly change a block's hash is to change the block information and recalculate the hash. Eventually, a valid hash will be randomly discovered (the block is now "mined"). In order to not change any existing variables in the block, a new variable called "nonce" is introduced specifically to change the hash. After each failed mining attempt, nonce is incremented by 1. This process of mining increases the computational work required to create a single event and makes blocks harder to alter the older they are (because more blocks ahead of it would also need to be recalculated). 
