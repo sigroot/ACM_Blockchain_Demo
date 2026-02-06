@@ -17,11 +17,12 @@
 using namespace std;
 
 struct block {
-    size_t index;       // The index of the block in the chain
-    time_t timestamp;   // The time of the block event
-    string data;        // The data stored in the block
-    string prev_hash;   // The hash of the last block in the chain
-    string this_hash;   // The hash of this block
+    size_t index;               // The index of the block in the chain
+    time_t timestamp;           // The time of the block event
+    string data;                // The data stored in the block
+    string prev_hash;           // The hash of the last block in the chain
+    string this_hash;           // The hash of this block
+    unsigned long long nonce;   // Additional data to change the block hash
 
     // Constructor
     block (size_t _index, time_t _timestamp, string _data, string _prev_hash) {
@@ -29,10 +30,12 @@ struct block {
         timestamp = _timestamp;
         data = _data;
         prev_hash = _prev_hash;
+        nonce = 0;      // Define starting value of nonce before mining
         this_hash = create_hash();        
     }
 
     // Return this block's hash
+    // Now includes nonce
     string create_hash() {
         // Generate block string without own hash. Otherwise, the change to the 
         // block would change the blocks hash and force recalculation. Nigh 
@@ -52,6 +55,9 @@ struct block {
         concatBlock += data;
         // Add previous hash
         concatBlock += prev_hash;
+        // Add nonce
+        snprintf(buffer, 20, "%llu", nonce);
+        concatBlock += buffer;
         
         // Calculate and return hash
         unsigned char* raw_hash = SHA256((const unsigned char *) concatBlock.c_str(), strlen(concatBlock.c_str()), NULL);
@@ -60,6 +66,34 @@ struct block {
             snprintf((return_hash+(2*i)), 3, "%2.2X", *(raw_hash+i));
         }
         return return_hash;
+    }
+
+    // Change nonce until block hash is 'valid'. A 'valid' block is arbitrarily 
+    // defined to be any block with *difficulty* 0's at the beginning of the 
+    // hash.
+    void mine_block(short difficulty) {
+        bool mining = true;
+        while (mining) {
+            // if the first *difficulty* characters in this hash are 0, then
+            // stop mining. Otherwise, increase nonce and recalcutate hash
+            for (short i = 0; i < difficulty; i++) {
+                // The current character in this_hash is not 0
+                if (this_hash[i] == '0') {
+                    // Difficulty requirement met, break while loop
+                    if (i+1 == difficulty) {
+                        mining = false;
+                    }
+                } else {
+                    break;
+                }
+            }
+            // Difficulty requirement met, break while loop
+            if (mining == false) break;
+
+            // Recalculate hash
+            nonce++;
+            this_hash = create_hash();
+        }
     }
 
     // Return a printable string of the block

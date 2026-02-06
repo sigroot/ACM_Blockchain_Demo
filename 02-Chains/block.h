@@ -17,11 +17,11 @@
 using namespace std;
 
 struct block {
-    size_t index;
-    time_t timestamp;
-    string data;
-    string prev_hash;
-    string this_hash;
+    size_t index;       // The index of the block in the chain
+    time_t timestamp;   // The time of the block event
+    string data;        // The data stored in the block
+    string prev_hash;   // The hash of the last block in the chain
+    string this_hash;   // The hash of this block
 
     // Constructor
     block (size_t _index, time_t _timestamp, string _data, string _prev_hash) {
@@ -42,7 +42,7 @@ struct block {
 
         // Build string
         // Add index
-        char buffer[] = {};
+        char buffer[20] = {};
         snprintf(buffer, 20, "%lu", index);
         concatBlock += buffer;
         // Add timestamp
