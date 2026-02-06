@@ -19,4 +19,8 @@ This section defines the "block" struct. Each block contains a section of data a
 
 ### 02-Chains
 
-This section adds a "chain" struct to hold blocks. It also defines the "genesis block", or the first block in a chain.
+This section adds a "chain" struct to hold blocks. It also defines the "genesis block", or the first block in a chain. Each block will be connected to this genesis block.
+
+### 03-AddingBlocks
+
+This section deals with adding blocks to the chain. Now blocks can be seen to each relate to the last block in the chain. If a block in the middle is modified, then the hashes in that block and the next block will be innacurate. Because the block's **prev_hash** is factored into its **this_hash**, each block following the modified block would also need to be modified for the hashes to become consistent again.
