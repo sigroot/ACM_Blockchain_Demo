@@ -104,7 +104,7 @@ struct block {
         output += "{\n\tIndex: ";
 
         // Add index
-        char buffer[] = {};
+        char buffer[20] = {};
         snprintf(buffer, 20, "%lu", index);
         output += buffer;
 
@@ -124,12 +124,18 @@ struct block {
         // Add previous hash
         output += prev_hash;
 
-        output += "\"\n\tThis Blocks Hash:\"";
+        output += "\"\n\tThis Block's Hash:\"";
         
         // Add this hash
         output += this_hash;
 
-        output += "\"\n}";
+        output += "\"";
+
+        output += "\n\tNonce: ";
+        snprintf(buffer, 20, "%llu", nonce);
+        output += buffer;
+
+        output += "\n}";
 
         return output;
     }
