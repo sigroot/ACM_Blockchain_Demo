@@ -15,12 +15,16 @@ https://drlee.io/building-your-own-blockchain-in-python-a-step-by-step-guide-ec1
 ## Units
 ### 01-Blocks
 
-This section defines the "block" struct. Each block contains a section of data and two cryptographic hashes. The first hash is of the block itself while the second is of the previous block in the chain (establishing a verifiable link between the blocks as the chain grows).
+This unit defines the "block" struct. Each block contains a section of data and two cryptographic hashes. The first hash is of the block itself while the second is of the previous block in the chain (establishing a verifiable link between the blocks as the chain grows).
 
 ### 02-Chains
 
-This section adds a "chain" struct to hold blocks. It also defines the "genesis block", or the first block in a chain. Each block will be connected to this genesis block.
+This unit adds a "chain" struct to hold blocks. It also defines the "genesis block", or the first block in a chain. Each block will be connected to this genesis block. 
 
 ### 03-AddingBlocks
 
-This section deals with adding blocks to the chain. Now blocks can be seen to each relate to the last block in the chain. If a block in the middle is modified, then the hashes in that block and the next block will be innacurate. Because the block's **prev_hash** is factored into its **this_hash**, each block following the modified block would also need to be modified for the hashes to become consistent again.
+This unit starts adding blocks to the chain. Now blocks can each be seen to relate to the last block in the chain. If a block in the middle is modified, then that block's hash would need to change. Because the each block's **prev_hash** is factored into its **this_hash**, each block following the modified block would also need to be modified for the chain's hashes to become consistent again.
+
+### 04-ChainValidation
+
+This unit allows the chain to validate its own hashes. The chain now technically works and could create an agreed upon series of events between a network of devices (though that would several other mechanisms to prevent individuals from confusing the others. This will not delve into those mechanisms.). However, this is not sufficient for blockchain's most well known usecase: cryptocurrency. Currently blocks are nearly free to create.
