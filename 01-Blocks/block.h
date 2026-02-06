@@ -2,7 +2,7 @@
  * Based on tutorial by Dr. Ernesto Lee
  * https://drlee.io/building-your-own-blockchain-in-python-a-step-by-step-guide-ec10ea6c976d
  *
- * Header file containing definition of block for blockchain demo.
+ * block.h: Header file containing definition of block for blockchain demo.
  */
 
 #ifndef block_h
