@@ -8,10 +8,11 @@ https://drlee.io/building-your-own-blockchain-in-python-a-step-by-step-guide-ec1
 
 ## Requirements
  - g++ (to compile c++ code)
-    - **Important note: to correctly compile with the openssl library, the g++ command must include the flags '-lssl' and '-lcrypto'**
+    - **Important note: to correctly compile with the openssl library, the g++ command must include the flag '-lcrypto' (e.g. g++ test.cpp -o test -lcrypto)**
  - openssl (for hashing)
  - a desire to learn (for maximal mental gain)
 
+## Units
 ### 01-Blocks
 
 This section defines the "block" struct. Each block contains a section of data and two cryptographic hashes. The first hash is of the block itself while the second is of the previous block in the chain (establishing a verifiable link between the blocks as the chain grows).
