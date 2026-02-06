@@ -7,8 +7,9 @@
 
 #ifndef chain_h
 #define chain_h
-  
+ 
 #include "block.h" 
+#include "transaction.h"
 #include <vector>
 #include <chrono>
 
@@ -17,18 +18,22 @@ using namespace std;
 struct block_chain {
     vector<block> chain;
     short difficulty;
+    vector<transaction> pending_transactions;
+    double mining_reward;
 
     // Constructor
     block_chain (short _difficulty) {
         difficulty = _difficulty;
         chain = {};
         chain.push_back(create_genesis_block());
+        pending_transactions = vector<transaction>();
+        mining_reward = 10.0;
     }
 
     // Create a genesis block for the block_chain.
     // Now with mined hash
     block create_genesis_block() {
-        block genesis = block(0, chrono::system_clock::to_time_t(chrono::system_clock::now()), "Basic Data", "0000000000000000000000000000000000000000000000000000000000000000");
+        block genesis = block(chrono::system_clock::to_time_t(chrono::system_clock::now()), vector<transaction>(), "0000000000000000000000000000000000000000000000000000000000000000");
         genesis.mine_block(difficulty);
         return genesis;
     }
@@ -39,13 +44,55 @@ struct block_chain {
         return chain[chain.size()-1];
     }
 
+    // Mine a block representing the current pending transactions
+    void mine_pending_transactions(string mining_reward_address) {
+        // Mine a new block
+        block new_block = block(chrono::system_clock::to_time_t(chrono::system_clock::now()), pending_transactions, get_last_block().this_hash); 
+        
+        new_block.mine_block(difficulty);
+
+        // Append to block chain
+        chain.push_back(new_block);
+
+        // Reset transactions
+        pending_transactions.clear();
+        pending_transactions.push_back(transaction("", mining_reward_address, mining_reward));
+    }
+
+    // Append to pending trans
+    void create_transaction(transaction _transaction) {
+        pending_transactions.push_back(_transaction);
+    }
+
+    // Check a given address's current balance (by iterating over the history
+    // contained in the block chain)
+    double get_balance_of_address(string address) {
+        double balance = 0;
+
+        for (int i = 0; i < chain.size(); i++) {
+            block current_block = chain[i];
+            for (int j = 0; chain[i].transactions.size(); j++) {
+                transaction current_transaction = current_block.transactions[j];
+                if (current_transaction.from_addr == address) {
+                    balance -= current_transaction.amount;
+                }
+                if (current_transaction.to_addr == address) {
+                    balance += current_transaction.amount;
+                }
+            }
+        }
+
+        return balance;
+    }
+
+    // REMOVED 'add_block()'
     // Add a block to the chain
     // Now with mined hash
-    void add_block(string data, time_t timestamp) {
+    /*void add_block(string data, time_t timestamp) {
         block new_block = block(chain.size(), timestamp, data, get_last_block().this_hash);
         new_block.mine_block(difficulty);
         chain.push_back(new_block);
-    }
+    }*/
 
     // Check the hashes of the block_chain
     bool is_valid() {

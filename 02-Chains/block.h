@@ -47,7 +47,7 @@ struct block {
         concatBlock += buffer;
         // Add timestamp
         concatBlock += asctime(gmtime(&timestamp));
-        concatBlock.pop_back();
+        concatBlock.pop_back(); // Remove newline from timestamp
         // Add data
         concatBlock += data;
         // Add previous hash

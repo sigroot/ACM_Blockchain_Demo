@@ -78,7 +78,7 @@ struct block {
 
         // Add timestamp
         output += asctime(gmtime(&timestamp));
-        output.pop_back();
+        output.pop_back(); // Remove newline from timestamp
 
         output += "\"\n\tData: \"";
 

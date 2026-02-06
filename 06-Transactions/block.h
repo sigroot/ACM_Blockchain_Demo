@@ -13,22 +13,22 @@
 #include <string>
 #include <cstring>
 #include <stdio.h>
+#include <vector>
+#include "transaction.h"
 
 using namespace std;
 
 struct block {
-    size_t index;               // The index of the block in the chain
-    time_t timestamp;           // The time of the block event
-    string data;                // The data stored in the block
-    string prev_hash;           // The hash of the last block in the chain
-    string this_hash;           // The hash of this block
-    unsigned long long nonce;   // Additional data to change the block hash
+    time_t timestamp;                   // The time of the block event
+    vector<transaction> transactions;   // The transactions represented by this block
+    string prev_hash;                   // The hash of the last block in the chain
+    string this_hash;                   // The hash of this block
+    unsigned long long nonce;           // Additional data to change the block hash
 
     // Constructor
-    block (size_t _index, time_t _timestamp, string _data, string _prev_hash) {
-        index = _index;
+    block (time_t _timestamp, vector<transaction> _transactions, string _prev_hash) {
         timestamp = _timestamp;
-        data = _data;
+        transactions = vector<transaction>(_transactions);
         prev_hash = _prev_hash;
         nonce = 0;      // Define starting value of nonce before mining
         this_hash = create_hash();        
@@ -44,18 +44,18 @@ struct block {
         string concatBlock;
 
         // Build string
-        // Add index
-        char buffer[20] = {};
-        snprintf(buffer, 20, "%lu", index);
-        concatBlock += buffer;
+
+        // Add previous hash
+        concatBlock += prev_hash;
         // Add timestamp
         concatBlock += asctime(gmtime(&timestamp));
         concatBlock.pop_back(); // Remove newline from timestamp
-        // Add data
-        concatBlock += data;
-        // Add previous hash
-        concatBlock += prev_hash;
+        // Add transactions
+        for (int i = 0; i < transactions.size(); i++) {
+            concatBlock += transactions[i].to_string();
+        }
         // Add nonce
+        char buffer[20] = {};
         snprintf(buffer, 20, "%llu", nonce);
         concatBlock += buffer;
         
@@ -103,21 +103,11 @@ struct block {
         // Build string
         output += "{\n\tIndex: ";
 
-        // Add index
-        char buffer[20] = {};
-        snprintf(buffer, 20, "%lu", index);
-        output += buffer;
-
         output += "\n\tTimestamp: \"";
 
         // Add timestamp
         output += asctime(gmtime(&timestamp));
         output.pop_back();
-
-        output += "\"\n\tData: \"";
-
-        // Add data
-        output += data;
 
         output += "\"\n\tPrevious Hash: \"";
 
@@ -132,8 +122,14 @@ struct block {
         output += "\"";
 
         output += "\n\tNonce: ";
+        char buffer[20] = {};
         snprintf(buffer, 20, "%llu", nonce);
         output += buffer;
+
+        output += "\n\tTransactions:";
+        for (int i = 0; i < transactions.size(); i++) {
+            printf("\n\t\t%s", transactions[i].to_string().c_str());
+        }
 
         output += "\n}";
 

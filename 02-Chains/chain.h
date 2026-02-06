@@ -2,8 +2,11 @@
  * Based on tutorial by Dr. Ernesto Lee
  * https://drlee.io/building-your-own-blockchain-in-python-a-step-by-step-guide-ec10ea6c976d
  *
- * chain.h: Header file containing definition of chain for blockchain demo.
+ * chain.h: Header file containing definition of block_chain for blockchain demo.
  */
+
+#ifndef chain_h
+#define chain_h
 
 #include "block.h" 
 #include <vector>
@@ -38,3 +41,5 @@ struct block_chain {
         return output_string;
     }
 };
+
+#endif
