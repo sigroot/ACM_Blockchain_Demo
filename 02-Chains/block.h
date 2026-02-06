@@ -32,6 +32,35 @@ struct block {
         this_hash = create_hash();        
     }
 
+    // Return this block's hash
+    string create_hash() {
+        // Generate block string without own hash. Otherwise, the change to the 
+        // block would change the blocks hash and force recalculation. Nigh 
+        // impossible to correctly calculate.
+
+        string concatBlock;
+
+        // Build string
+        // Add index
+        char buffer[] = {};
+        snprintf(buffer, 20, "%lu", index);
+        concatBlock += buffer;
+        // Add timestamp
+        concatBlock += asctime(gmtime(&timestamp));
+        concatBlock.pop_back();
+        // Add data
+        concatBlock += data;
+        // Add previous hash
+        concatBlock += prev_hash;
+        
+        // Calculate and return hash
+        unsigned char* raw_hash = SHA256((const unsigned char *) concatBlock.c_str(), strlen(concatBlock.c_str()), NULL);
+        char return_hash[64] = {};
+        for (int i = 0; i < 32; i++) {
+            snprintf((return_hash+(2*i)), 3, "%2.2X", *(raw_hash+i));
+        }
+        return return_hash;
+    }
 
     // Return a printable string of the block
     string to_string() {
@@ -69,36 +98,6 @@ struct block {
         output += "\"\n}";
 
         return output;
-    }
-
-    // Return this block's hash
-    string create_hash() {
-        // Generate block string without own hash. Otherwise, the change to the 
-        // block would change the blocks hash and force recalculation. Nigh 
-        // impossible to correctly calculate.
-
-        string concatBlock;
-
-        // Build string
-        // Add index
-        char buffer[] = {};
-        snprintf(buffer, 20, "%lu", index);
-        concatBlock += buffer;
-        // Add timestamp
-        concatBlock += asctime(gmtime(&timestamp));
-        concatBlock.pop_back();
-        // Add data
-        concatBlock += data;
-        // Add previous hash
-        concatBlock += prev_hash;
-        
-        // Calculate and return hash
-        unsigned char* raw_hash = SHA256((const unsigned char *) concatBlock.c_str(), strlen(concatBlock.c_str()), NULL);
-        char return_hash[64] = {};
-        for (int i = 0; i < 32; i++) {
-            snprintf((return_hash+(2*i)), 3, "%2.2X", *(raw_hash+i));
-        }
-        return return_hash;
     }
 };
 

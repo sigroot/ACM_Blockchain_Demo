@@ -25,6 +25,18 @@ struct block_chain {
         return block(0, chrono::system_clock::to_time_t(chrono::system_clock::now()), "Basic Data", "0000000000000000000000000000000000000000000000000000000000000000");
     }
 
+    // Return the newest block to the chain
+    // Required to get hash for new blocks
+    block get_last_block() {
+        return chain[chain.size()-1];
+    }
+
+    // Add a block to the chain
+    void add_block(string data, time_t timestamp) {
+        block new_block = block(chain.size(), timestamp, data, get_last_block().this_hash);
+        chain.push_back(new_block);
+    }
+
     // Return a printable string of the chain
     string to_string(){
         string output_string = "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
