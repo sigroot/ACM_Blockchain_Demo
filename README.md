@@ -35,5 +35,5 @@ This units now permits mining for blocks. Each block now has the additional requ
 
 ### 06-Transactions
 
-This unit modifies the current blockchain structure to better act as a currency. The "transaction" struct is added to represent a tranfer of currency betweeen users. The **index** variable in the block struct is removed amd **data** is replacedd by the transaction. Each block mined now provides a reward to an address (so that the total sum of currency can be above 0) and the block chain can be scanned, based on what a given user has lost and gained, to determine their balance.
+This unit modifies the current blockchain structure to better act as a currency. The "transaction" struct is added to represent a tranfer of currency betweeen users. The **index** variable in the block struct is removed amd **data** is replaced by the transaction. Each block mined now provides a reward to an address (so that the total sum of currency can be above 0) and the block chain can be scanned, based on what a given user has lost and gained, to determine their balance.
 
