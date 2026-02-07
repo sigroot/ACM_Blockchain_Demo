@@ -101,7 +101,7 @@ struct block {
         string output;
 
         // Build string
-        output += "{\n\tIndex: ";
+        output += "{";
 
         output += "\n\tTimestamp: \"";
 
@@ -128,7 +128,7 @@ struct block {
 
         output += "\n\tTransactions:";
         for (int i = 0; i < transactions.size(); i++) {
-            printf("\n\t\t%s", transactions[i].to_string().c_str());
+            output += "\n\t\t" + transactions[i].to_string() + ",";
         }
 
         output += "\n}";

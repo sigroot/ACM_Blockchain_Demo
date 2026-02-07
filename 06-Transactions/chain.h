@@ -48,7 +48,6 @@ struct block_chain {
     void mine_pending_transactions(string mining_reward_address) {
         // Mine a new block
         block new_block = block(chrono::system_clock::to_time_t(chrono::system_clock::now()), pending_transactions, get_last_block().this_hash); 
-        
         new_block.mine_block(difficulty);
 
         // Append to block chain
@@ -68,11 +67,10 @@ struct block_chain {
     // contained in the block chain)
     double get_balance_of_address(string address) {
         double balance = 0;
-
-        for (int i = 0; i < chain.size(); i++) {
-            block current_block = chain[i];
-            for (int j = 0; chain[i].transactions.size(); j++) {
-                transaction current_transaction = current_block.transactions[j];
+        // Read all transactions
+        for (block current_block : chain) {
+            for (transaction current_transaction : current_block.transactions) {
+                // Modify balance accordingly
                 if (current_transaction.from_addr == address) {
                     balance -= current_transaction.amount;
                 }
@@ -86,13 +84,6 @@ struct block_chain {
     }
 
     // REMOVED 'add_block()'
-    // Add a block to the chain
-    // Now with mined hash
-    /*void add_block(string data, time_t timestamp) {
-        block new_block = block(chain.size(), timestamp, data, get_last_block().this_hash);
-        new_block.mine_block(difficulty);
-        chain.push_back(new_block);
-    }*/
 
     // Check the hashes of the block_chain
     bool is_valid() {
@@ -113,6 +104,7 @@ struct block_chain {
     // Return a printable string of the chain
     string to_string(){
         string output_string = "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
+
         output_string += chain[0].to_string().c_str();
 
         for (int i = 1; i < chain.size(); i++) {

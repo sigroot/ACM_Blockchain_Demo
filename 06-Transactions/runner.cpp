@@ -21,14 +21,14 @@ int main() {
     my_chain.create_transaction(transaction("M3MY53LF1", "Other", 1337.0));
     printf("Mining transactions...\n");
     my_chain.mine_pending_transactions("M3MY53LF1");
-    printf("M3MY53LF1 Balance: %f\n", my_chain.get_balance_of_address("M3MY53LF1"));
+    //printf("M3MY53LF1 Balance: %f\n", my_chain.get_balance_of_address("M3MY53LF1"));
     printf("Recieved 42 BC\n");
     my_chain.create_transaction(transaction("Other", "M3MY53LF1", 42.0));
     printf("Lost 9999 BC\n");
-    my_chain.create_transaction(transaction("M3MY53LF1", "Other", 9999999999.0));
+    my_chain.create_transaction(transaction("M3MY53LF1", "Other", 9999.0));
     printf("Mining transactions...\n");
     my_chain.mine_pending_transactions("M3MY53LF1");
-    printf("M3MY53LF1 Balance: %f", my_chain.get_balance_of_address("M3MY53LF1"));
+    printf("M3MY53LF1 Balance: %f\n", my_chain.get_balance_of_address("M3MY53LF1"));
 
     printf("%s\n", my_chain.to_string().c_str());
     return 0;
